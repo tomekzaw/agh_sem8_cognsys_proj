@@ -11,9 +11,10 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		1EC2BA03E8ED636A03A99C01 /* libPods-iomt_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B7818552EF3CC67A8FC5AC57 /* libPods-iomt_app.a */; };
-		31C3D9C4730375EE0B12A8B4 /* libPods-iomt_app-iomt_appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 217463A0191E35A79947D81B /* libPods-iomt_app-iomt_appTests.a */; };
+		5E4B6C447A67A50D71F0D1BD /* libPods-iomt_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D6120D16EA859A0681DB9B6 /* libPods-iomt_app.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		95BC311526473FCF00A0E912 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BC311426473FCF00A0E912 /* File.swift */; };
+		D68E1683A4F0B398FE6D695F /* libPods-iomt_app-iomt_appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B30FE180585BCBB48B377E34 /* libPods-iomt_app-iomt_appTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,14 +37,16 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = iomt_app/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = iomt_app/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = iomt_app/main.m; sourceTree = "<group>"; };
-		217463A0191E35A79947D81B /* libPods-iomt_app-iomt_appTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iomt_app-iomt_appTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		290533531CECAEB10BE1575A /* Pods-iomt_app-iomt_appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iomt_app-iomt_appTests.release.xcconfig"; path = "Target Support Files/Pods-iomt_app-iomt_appTests/Pods-iomt_app-iomt_appTests.release.xcconfig"; sourceTree = "<group>"; };
+		1B7A95E55871ABCB19E70E05 /* Pods-iomt_app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iomt_app.release.xcconfig"; path = "Target Support Files/Pods-iomt_app/Pods-iomt_app.release.xcconfig"; sourceTree = "<group>"; };
+		322FDC4E14ECBC0220DE5FBE /* Pods-iomt_app-iomt_appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iomt_app-iomt_appTests.release.xcconfig"; path = "Target Support Files/Pods-iomt_app-iomt_appTests/Pods-iomt_app-iomt_appTests.release.xcconfig"; sourceTree = "<group>"; };
+		4D6120D16EA859A0681DB9B6 /* libPods-iomt_app.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iomt_app.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = iomt_app/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		924F70FC0B5D69A451D659BB /* Pods-iomt_app-iomt_appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iomt_app-iomt_appTests.debug.xcconfig"; path = "Target Support Files/Pods-iomt_app-iomt_appTests/Pods-iomt_app-iomt_appTests.debug.xcconfig"; sourceTree = "<group>"; };
-		9711DD1C6C0F8BDF9FCFD193 /* Pods-iomt_app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iomt_app.debug.xcconfig"; path = "Target Support Files/Pods-iomt_app/Pods-iomt_app.debug.xcconfig"; sourceTree = "<group>"; };
-		B7818552EF3CC67A8FC5AC57 /* libPods-iomt_app.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iomt_app.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		95BC311326473FCF00A0E912 /* iomt_app-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iomt_app-Bridging-Header.h"; sourceTree = "<group>"; };
+		95BC311426473FCF00A0E912 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		A4F71029F7369F80946A840B /* Pods-iomt_app-iomt_appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iomt_app-iomt_appTests.debug.xcconfig"; path = "Target Support Files/Pods-iomt_app-iomt_appTests/Pods-iomt_app-iomt_appTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B30FE180585BCBB48B377E34 /* libPods-iomt_app-iomt_appTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iomt_app-iomt_appTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D950935137FE7B923BCAD2AB /* Pods-iomt_app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iomt_app.debug.xcconfig"; path = "Target Support Files/Pods-iomt_app/Pods-iomt_app.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F9F6CCCB66C8C9C2C083697E /* Pods-iomt_app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iomt_app.release.xcconfig"; path = "Target Support Files/Pods-iomt_app/Pods-iomt_app.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,7 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				31C3D9C4730375EE0B12A8B4 /* libPods-iomt_app-iomt_appTests.a in Frameworks */,
+				D68E1683A4F0B398FE6D695F /* libPods-iomt_app-iomt_appTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EC2BA03E8ED636A03A99C01 /* libPods-iomt_app.a in Frameworks */,
+				5E4B6C447A67A50D71F0D1BD /* libPods-iomt_app.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,8 +103,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				B7818552EF3CC67A8FC5AC57 /* libPods-iomt_app.a */,
-				217463A0191E35A79947D81B /* libPods-iomt_app-iomt_appTests.a */,
+				4D6120D16EA859A0681DB9B6 /* libPods-iomt_app.a */,
+				B30FE180585BCBB48B377E34 /* libPods-iomt_app-iomt_appTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -116,12 +119,14 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				95BC311426473FCF00A0E912 /* File.swift */,
 				13B07FAE1A68108700A75B9A /* iomt_app */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* iomt_appTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				DB0329D6442FBE7EAC9D72A1 /* Pods */,
+				95BC311326473FCF00A0E912 /* iomt_app-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -140,12 +145,11 @@
 		DB0329D6442FBE7EAC9D72A1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9711DD1C6C0F8BDF9FCFD193 /* Pods-iomt_app.debug.xcconfig */,
-				F9F6CCCB66C8C9C2C083697E /* Pods-iomt_app.release.xcconfig */,
-				924F70FC0B5D69A451D659BB /* Pods-iomt_app-iomt_appTests.debug.xcconfig */,
-				290533531CECAEB10BE1575A /* Pods-iomt_app-iomt_appTests.release.xcconfig */,
+				D950935137FE7B923BCAD2AB /* Pods-iomt_app.debug.xcconfig */,
+				1B7A95E55871ABCB19E70E05 /* Pods-iomt_app.release.xcconfig */,
+				A4F71029F7369F80946A840B /* Pods-iomt_app-iomt_appTests.debug.xcconfig */,
+				322FDC4E14ECBC0220DE5FBE /* Pods-iomt_app-iomt_appTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -156,12 +160,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "iomt_appTests" */;
 			buildPhases = (
-				22B970C222F3DC02CF7BB7D3 /* [CP] Check Pods Manifest.lock */,
+				0F7320672AF8480DF2012FBD /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				E0E9DC2B2313FAAAD2C9201D /* [CP] Embed Pods Frameworks */,
-				B9C8A19EB0CC6066D6B48C52 /* [CP] Copy Pods Resources */,
+				C9A9E4DC24A206A4CDECB16B /* [CP] Embed Pods Frameworks */,
+				8F43A623A72502DD543C7E01 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -177,14 +181,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "iomt_app" */;
 			buildPhases = (
-				C8ECD36727567FCFD178E456 /* [CP] Check Pods Manifest.lock */,
+				335C10B8E3D776F0893F30F3 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				1D72740933C055BB5191879D /* [CP] Embed Pods Frameworks */,
-				96A580C17AE4D062FAED4A99 /* [CP] Copy Pods Resources */,
+				93CD5C3D91DC39A0211E1E28 /* [CP] Embed Pods Frameworks */,
+				C146DE7984EFBC1FEA8523B4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -208,7 +212,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1240;
 					};
 				};
 			};
@@ -265,24 +269,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		1D72740933C055BB5191879D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iomt_app/Pods-iomt_app-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iomt_app/Pods-iomt_app-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iomt_app/Pods-iomt_app-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		22B970C222F3DC02CF7BB7D3 /* [CP] Check Pods Manifest.lock */ = {
+		0F7320672AF8480DF2012FBD /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -304,41 +291,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		96A580C17AE4D062FAED4A99 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iomt_app/Pods-iomt_app-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iomt_app/Pods-iomt_app-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iomt_app/Pods-iomt_app-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B9C8A19EB0CC6066D6B48C52 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iomt_app-iomt_appTests/Pods-iomt_app-iomt_appTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iomt_app-iomt_appTests/Pods-iomt_app-iomt_appTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iomt_app-iomt_appTests/Pods-iomt_app-iomt_appTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C8ECD36727567FCFD178E456 /* [CP] Check Pods Manifest.lock */ = {
+		335C10B8E3D776F0893F30F3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -360,7 +313,58 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E0E9DC2B2313FAAAD2C9201D /* [CP] Embed Pods Frameworks */ = {
+		8F43A623A72502DD543C7E01 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iomt_app-iomt_appTests/Pods-iomt_app-iomt_appTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iomt_app-iomt_appTests/Pods-iomt_app-iomt_appTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iomt_app-iomt_appTests/Pods-iomt_app-iomt_appTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		93CD5C3D91DC39A0211E1E28 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iomt_app/Pods-iomt_app-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iomt_app/Pods-iomt_app-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iomt_app/Pods-iomt_app-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C146DE7984EFBC1FEA8523B4 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iomt_app/Pods-iomt_app-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iomt_app/Pods-iomt_app-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iomt_app/Pods-iomt_app-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C9A9E4DC24A206A4CDECB16B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -412,6 +416,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				95BC311526473FCF00A0E912 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -429,8 +434,9 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 924F70FC0B5D69A451D659BB /* Pods-iomt_app-iomt_appTests.debug.xcconfig */;
+			baseConfigurationReference = A4F71029F7369F80946A840B /* Pods-iomt_app-iomt_appTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -456,8 +462,9 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 290533531CECAEB10BE1575A /* Pods-iomt_app-iomt_appTests.release.xcconfig */;
+			baseConfigurationReference = 322FDC4E14ECBC0220DE5FBE /* Pods-iomt_app-iomt_appTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = iomt_appTests/Info.plist;
@@ -480,11 +487,12 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9711DD1C6C0F8BDF9FCFD193 /* Pods-iomt_app.debug.xcconfig */;
+			baseConfigurationReference = D950935137FE7B923BCAD2AB /* Pods-iomt_app.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XF837TNLGP;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = iomt_app/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -498,6 +506,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = iomt_app;
+				SWIFT_OBJC_BRIDGING_HEADER = "iomt_app-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -506,11 +515,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F9F6CCCB66C8C9C2C083697E /* Pods-iomt_app.release.xcconfig */;
+			baseConfigurationReference = 1B7A95E55871ABCB19E70E05 /* Pods-iomt_app.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XF837TNLGP;
 				INFOPLIST_FILE = iomt_app/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -523,6 +533,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = iomt_app;
+				SWIFT_OBJC_BRIDGING_HEADER = "iomt_app-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

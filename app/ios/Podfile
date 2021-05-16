@@ -12,7 +12,7 @@ target 'iomt_app' do
     :hermes_enabled => false
   )
 
-  pod 'react-native-ble-plx', :path => '../node_modules/react-native-ble-plx'
+  # pod 'react-native-ble-plx', :path => '../node_modules/react-native-ble-plx'
 
   target 'iomt_appTests' do
     inherit! :complete
