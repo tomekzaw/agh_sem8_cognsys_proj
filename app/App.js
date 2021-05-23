@@ -18,79 +18,129 @@ const serviceUUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
 const characteristicUUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
 const App = () => {
-  const [text, setText] = React.useState('Disconnected');
-  const [disabled, setDisabled] = React.useState(false);
-  const [devices, setDevices] = React.useState({});
+  const [devices, setDevices] = React.useState([]);
+  const devicesRef = React.useRef({});
 
-  const handleConnectPress = async () => {
-    console.log('Scan in progress...');
-    setText('Scan in progress...');
-    setDisabled(true);
+  const updateUI = () => {
+    setDevices(Object.values(devicesRef.current));
+  };
 
-    // start device scan when app is resumed
+  const addDevice = device => {
+    devicesRef.current[device.id] = {
+      device,
+      value: null,
+      subscription: null,
+    };
+    updateUI();
+  };
+
+  const hasDevice = device => {
+    return device.id in devicesRef.current;
+  };
+
+  const updateDeviceValue = (device, value) => {
+    devicesRef.current[device.id] = {...devicesRef.current[device.id], value};
+    updateUI();
+  };
+
+  const updateDeviceSubscription = (device, subscription) => {
+    devicesRef.current[device.id] = {
+      ...devicesRef.current[device.id],
+      subscription,
+    };
+    updateUI();
+  };
+
+  const deleteDevice = device => {
+    // TODO: move cleanup logic somewhere else
+    // TODO: use device.onDisconnected?
+    const {subscription} = devicesRef.current[device.id];
+    delete devicesRef.current[device.id];
+    if (devicesRef) {
+      subscription.remove();
+    }
+    (async () => {
+      if (await device.isConnected()) {
+        await device.cancelConnection();
+      }
+    })();
+    updateUI();
+  };
+
+  const asyncHandleConnect = async (error, device) => {
+    if (error) {
+      // TODO: handle Bluetooth adapter or Location off
+      console.log(JSON.stringify(error));
+      return;
+    }
+
+    if (hasDevice(device)) {
+      // console.log(`Duplicate of ${device.id}`);
+      // device already connected (prevent duplication)
+      return;
+    }
+
+    addDevice(device);
+
+    try {
+      console.log(`Trying to connect to ${device.id}`);
+
+      await bleManager.connectToDevice(device.id);
+      console.log(`Connected to ${device.id}`);
+
+      await device.discoverAllServicesAndCharacteristics();
+      console.log(`Discovered ${device.id}`);
+
+      const characteristic = await device.readCharacteristicForService(
+        serviceUUID,
+        characteristicUUID,
+      );
+      const value = base64.decode(characteristic.value);
+      console.log(`Read characteristic for ${device.id}: ${value}`);
+      updateDeviceValue(device, value);
+
+      const subscription = characteristic.monitor(
+        async (error, characteristic) => {
+          console.log(`Monitoring ${device.id}`);
+
+          if (error) {
+            console.log(`Error while monitoring ${device.id}`);
+            deleteDevice(device);
+            return;
+          }
+
+          const value = base64.decode(characteristic.value);
+          updateDeviceValue(device, value);
+          console.log(`Updated characteristic for ${device.id}: ${value}`);
+        },
+      );
+      console.log(`Subscribed for ${device.id}`);
+      updateDeviceSubscription(device, subscription);
+    } catch (e) {
+      console.log(`Error for ${device.id}, deleting`);
+      deleteDevice(device);
+    }
+  };
+
+  const asyncInit = async () => {
     await bleManager.startDeviceScan(
       [serviceUUID],
-      {
-        allowDuplicates: true,
-      },
-      async (error, device) => {
-        if (error) {
-          // TODO: handle Bluetooth adapter or Location off
-          console.log(JSON.stringify(error));
-          setText('Scan error');
-          setDisabled(false);
-          return;
-        }
-
-        if (devices[device.id]) {
-          return;
-        }
-
-        console.log('Scanned device: ' + device.name);
-        devices[device.id] = device;
-        setDevices(devices);
-        // setDevices is only to ensure that no other scan will connect to device in the same time
-
-        try {
-          await bleManager.connectToDevice(device.id);
-        } catch (e) {
-          devices[device.id] = null;
-          setDevices(devices);
-        }
-
-        await device.discoverAllServicesAndCharacteristics();
-        const characteristic = await device.readCharacteristicForService(
-          serviceUUID,
-          characteristicUUID,
-        );
-
-        setText(base64.decode(characteristic.value));
-
-        const subscription = characteristic.monitor(
-          async (error, characteristic) => {
-            if (!error) {
-              setText(base64.decode(characteristic.value));
-            } else {
-              setText('Disconnected');
-              console.log('Device disconnected');
-              try {
-                await devices[device.id].cancelConnection();
-              } catch (e) {}
-              devices[device.id] = null;
-              setDevices(devices);
-            }
-          },
-        );
-
-        console.log('Device connected');
-        setDisabled(false);
-      },
+      {allowDuplicates: true},
+      asyncHandleConnect,
     );
   };
 
-  const handleDisconnectPress = async () => {
+  const asyncCleanup = async () => {
+    // TODO: cancel all subscriptions
     await bleManager.stopDeviceScan();
   };
+
+  React.useEffect(() => {
+    asyncInit();
+    return () => {
+      asyncCleanup();
+    };
+  }, []);
 
   const handleSaySomething = async () => {
     Tts.getInitStatus().then(() => {
@@ -104,18 +154,18 @@ const App = () => {
 
   return (
     <View style={styles.containerStyle}>
-      <Button
-        title="Click me to start scanning!"
-        onPress={handleConnectPress}
-        disabled={disabled}
-      />
-      <Button
-        title="Click me to stop scanning!"
-        onPress={handleDisconnectPress}
-        disabled={disabled}
-      />
-      <Button title="Say something!" onPress={handleSaySomething} />
-      <Text>{text}</Text>
+      <View style={styles.beaconsContainerStyle}>
+        {devices.map(d => (
+          <View key={d.device.id} style={styles.beaconItemStyle}>
+            <Text>Name: {d.device.name}</Text>
+            <Text>ID: {d.device.id}</Text>
+            <Text>Characteristic: {d.value}</Text>
+          </View>
+        ))}
+      </View>
+      <View style={styles.buttonsContainerStyle}>
+        <Button title="Say something!" onPress={handleSaySomething} />
+      </View>
     </View>
   );
 };
@@ -123,9 +173,21 @@ const App = () => {
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
+  },
+  beaconsContainerStyle: {
+    flex: 2,
+    backgroundColor: '#fff',
+  },
+  beaconItemStyle: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgray',
+  },
+  buttonsContainerStyle: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#eee',
   },
 });
 
