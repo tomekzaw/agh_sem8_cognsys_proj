@@ -82,6 +82,8 @@ const App = () => {
 
     addDevice(device);
 
+    device.onDisconnected(() => console.log(`Disconnected ${device.id}`));
+
     try {
       console.log(`Trying to connect to ${device.id}`);
 
