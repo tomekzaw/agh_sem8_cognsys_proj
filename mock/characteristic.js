@@ -5,6 +5,7 @@ const util = require("util");
 
 const characteristicUUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 const notifyInterval = 1000; // 1 second
+const generator = require("./generators").traffic_lights();
 
 var CustomCharacteristic = function () {
   CustomCharacteristic.super_.call(this, {
@@ -20,7 +21,8 @@ util.inherits(CustomCharacteristic, BlenoCharacteristic);
 module.exports = CustomCharacteristic;
 
 CustomCharacteristic.prototype.onReadRequest = function (offset, callback) {
-  const data = Buffer.from("onReadRequest");
+  const state = generator.next().value;
+  const data = Buffer.from(JSON.stringify(state));
   callback(this.RESULT_SUCCESS, data);
 };
 
@@ -41,7 +43,8 @@ CustomCharacteristic.prototype.onUnsubscribe = function () {
 var isSubscribed = false;
 
 function notify(callback) {
-  const data = Buffer.from(`notify ${Math.round(Math.random() * 1000)}`);
+  const state = generator.next().value;
+  const data = Buffer.from(JSON.stringify(state));
   callback(data);
 }
 
