@@ -5,16 +5,14 @@ function* traffic_lights() {
     for (let i = 9; i > 0; i--) {
       yield {
         type: "TRAFFIC_LIGHTS",
-        current: "RED",
-        next: "GREEN",
+        color: "RED",
         seconds: i,
       };
     }
     for (let i = 7; i > 0; i--) {
       yield {
         type: "TRAFFIC_LIGHTS",
-        current: "GREEN",
-        next: "RED",
+        color: "GREEN",
         seconds: i,
       };
     }

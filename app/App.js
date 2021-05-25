@@ -17,6 +17,64 @@ const bleManager = new BleManager();
 const serviceUUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
 const characteristicUUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
+class Say {
+  constructor(what) {
+    this.what = what;
+  }
+
+  run() {
+    Tts.speak(this.what);
+  }
+}
+
+class PublicTransportVehicle {
+  onAppear(current) {
+    return new Say(
+      `Podjeżdża autobus ${current.route}, kierunek ${current.direction}.`,
+    );
+  }
+
+  onDisappear(previous) {
+    return new Say(`Autobus ${previous.route} odjechał.`);
+  }
+
+  onChange(previous, current) {
+    if (previous.state !== current.state) {
+      if (current.state === 'DOORS_OPEN') {
+        return new Say('Drzwi otwierają się.');
+      }
+      if (current.state === 'LEAVING') {
+        return new Say(`Autobus ${current.route} odjechał.`);
+      }
+    }
+  }
+}
+
+class TrafficLights {
+  onAppear(current) {
+    const color = current.current === 'GREEN' ? 'zielone' : 'czerwone';
+    return new Say(`Przejście dla pieszych. Światło ${color}.`);
+  }
+
+  onDisappear(previous) {}
+
+  onChange(previous, current) {
+    if (previous.color !== current.color) {
+      const color = current.color === 'GREEN' ? 'zielone' : 'czerwone';
+      return new Say(`Światło ${color}. Pozostało ${current.seconds} sekund.`);
+    }
+  }
+}
+
+function createBeacon(type) {
+  switch (type) {
+    case 'BUS':
+      return new PublicTransportVehicle();
+    case 'TRAFFIC_LIGHTS':
+      return new TrafficLights();
+  }
+}
+
 const App = () => {
   const [devices, setDevices] = React.useState([]);
   const devicesRef = React.useRef({});
@@ -41,6 +99,10 @@ const App = () => {
   const updateDeviceValue = (device, value) => {
     devicesRef.current[device.id] = {...devicesRef.current[device.id], value};
     updateUI();
+  };
+
+  const getDeviceValue = device => {
+    return devicesRef.current[device.id].value;
   };
 
   const updateDeviceSubscription = (device, subscription) => {
@@ -102,6 +164,16 @@ const App = () => {
       console.log(`Read characteristic for ${device.id}: ${value}`);
       updateDeviceValue(device, value);
 
+      const {type, ...params} = JSON.parse(value);
+      const beacon = createBeacon(type);
+      beacon?.onAppear(params)?.run();
+
+      device.onDisconnected(() => {
+        console.log(`Disconnected ${device.id}`);
+        const oldParams = JSON.parse(getDeviceValue(device));
+        beacon?.onDisappear(oldParams)?.run();
+      });
+
       const subscription = characteristic.monitor(
         async (error, characteristic) => {
           console.log(`Monitoring ${device.id}`);
@@ -112,9 +184,14 @@ const App = () => {
             return;
           }
 
+          const oldParams = JSON.parse(getDeviceValue(device));
+
           const value = base64.decode(characteristic.value);
           updateDeviceValue(device, value);
           console.log(`Updated characteristic for ${device.id}`);
+
+          const newParams = JSON.parse(value);
+          beacon?.onChange(oldParams, newParams)?.run();
         },
       );
       console.log(`Subscribed for ${device.id}`);

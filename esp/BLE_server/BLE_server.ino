@@ -82,9 +82,8 @@ void loop() {
     else secondsToChange = SECONDS_TO_CHANGE_RED_LIGHTS;
   }
 
-  sprintf(buffer, "{\"type\":\"TRAFFIC_LIGHTS\",\"current\":\"%s\",\"next\":\"%s\",\"seconds\":%d}",
+  sprintf(buffer, "{\"type\":\"TRAFFIC_LIGHTS\",\"color\":\"%s\",\"seconds\":%d}",
     state ? "GREEN" : "RED",
-    state ? "RED" : "GREEN",
     secondsToChange);
     
   pCharacteristic->setValue(buffer);
