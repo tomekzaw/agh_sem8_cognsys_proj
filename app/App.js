@@ -87,7 +87,7 @@ const App = () => {
     try {
       console.log(`Trying to connect to ${device.id}`);
 
-      await bleManager.connectToDevice(device.id);
+      await bleManager.connectToDevice(device.id, {requestMTU: 512});
       console.log(`Connected to ${device.id}`);
 
       await device.discoverAllServicesAndCharacteristics();

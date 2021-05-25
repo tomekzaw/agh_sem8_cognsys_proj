@@ -5,22 +5,29 @@
 
 BLEServer* pServer = NULL;
 BLECharacteristic* pCharacteristic = NULL;
-bool deviceConnected = false;
-bool oldDeviceConnected = false;
-uint32_t value = 0;
 
 #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
 
+
+//#define TRAFFIC_LIGHTS_MODE
+#define BUS_MODE
+
+#ifdef TRAFFIC_LIGHTS_MODE
+#define SECONDS_TO_CHANGE_RED_LIGHTS 9
+#define SECONDS_TO_CHANGE_GREEN_LIGHTS 7
+char buffer[512];
+int secondsToChange = 10;
+bool state = false;
+#endif
+
 class MyServerCallbacks: public BLEServerCallbacks {
     void onConnect(BLEServer* pServer) {
-      deviceConnected = true;
       pServer->startAdvertising();
     };
 
     void onDisconnect(BLEServer* pServer) {
-      deviceConnected = false;
     }
 };
 
@@ -63,21 +70,25 @@ void setup() {
 }
 
 void loop() {
-    // notify changed value
-    if (deviceConnected) {
-        pCharacteristic->setValue(value % 2 == 0 ? "RED" : "GREEN");
-        pCharacteristic->notify();
-        value++;
-        delay(5000); // bluetooth stack will go into congestion, if too many packets are sent, in 6 hours test i was able to go as low as 3ms
-        Serial.println("Still notifying...");
-    }
-    // disconnecting
-    if (!deviceConnected && oldDeviceConnected) {
-        oldDeviceConnected = deviceConnected;
-    }
-    // connecting
-    if (deviceConnected && !oldDeviceConnected) {
-        // do stuff here on connecting
-        oldDeviceConnected = deviceConnected;
-    }
+  #ifdef BUS_MODE
+  pCharacteristic->setValue("{\"type\":\"BUS\",\"route\":\"139\",\"direction\":\"Miasteczko Studenckie AGH\"}");
+  #endif
+  
+  #ifdef TRAFFIC_LIGHTS_MODE
+  secondsToChange--;
+  if (secondsToChange <= 0) {
+    state = !state;
+    if (state) secondsToChange = SECONDS_TO_CHANGE_GREEN_LIGHTS;
+    else secondsToChange = SECONDS_TO_CHANGE_RED_LIGHTS;
+  }
+
+  sprintf(buffer, "{\"type\":\"TRAFFIC_LIGHTS\",\"current\":\"%s\",\"next\":\"%s\",\"seconds\":%d}",
+    state ? "GREEN" : "RED",
+    state ? "RED" : "GREEN",
+    secondsToChange);
+    
+  pCharacteristic->setValue(buffer);
+  pCharacteristic->notify();
+  delay(1000);
+  #endif
 }
