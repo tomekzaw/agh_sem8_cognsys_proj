@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import {BleManager} from 'react-native-ble-plx';
 import React from 'react';
@@ -56,11 +56,12 @@ const App = () => {
     // TODO: use device.onDisconnected?
     const {subscription} = devicesRef.current[device.id];
     delete devicesRef.current[device.id];
-    if (devicesRef) {
+    if (subscription) {
       subscription.remove();
     }
     (async () => {
       if (await device.isConnected()) {
+        console.log(`Cancelling connection with ${device.id}`);
         await device.cancelConnection();
       }
     })();
@@ -85,7 +86,7 @@ const App = () => {
     device.onDisconnected(() => console.log(`Disconnected ${device.id}`));
 
     try {
-      console.log(`Trying to connect to ${device.id}`);
+      console.log(`Detected ${device.id}`);
 
       await bleManager.connectToDevice(device.id, {requestMTU: 512});
       console.log(`Connected to ${device.id}`);
@@ -113,7 +114,7 @@ const App = () => {
 
           const value = base64.decode(characteristic.value);
           updateDeviceValue(device, value);
-          console.log(`Updated characteristic for ${device.id}: ${value}`);
+          console.log(`Updated characteristic for ${device.id}`);
         },
       );
       console.log(`Subscribed for ${device.id}`);
@@ -158,11 +159,13 @@ const App = () => {
     <View style={styles.containerStyle}>
       <View style={styles.beaconsContainerStyle}>
         {devices.map(d => (
-          <View key={d.device.id} style={styles.beaconItemStyle}>
-            <Text>Name: {d.device.name}</Text>
-            <Text>ID: {d.device.id}</Text>
-            <Text>Characteristic: {d.value}</Text>
-          </View>
+          <TouchableOpacity key={d.device.id} onPress={() => {}}>
+            <View style={styles.beaconItemStyle}>
+              <Text>Name: {d.device.name}</Text>
+              <Text>ID: {d.device.id}</Text>
+              <Text>Characteristic: {d.value}</Text>
+            </View>
+          </TouchableOpacity>
         ))}
       </View>
       <View style={styles.buttonsContainerStyle}>
