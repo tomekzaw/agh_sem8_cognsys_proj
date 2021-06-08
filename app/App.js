@@ -6,7 +6,14 @@
  * @flow strict-local
  */
 
-import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from 'react-native';
 
 import {BleManager} from 'react-native-ble-plx';
 import React from 'react';
@@ -22,29 +29,43 @@ class Say {
     this.what = what;
   }
 
-  run() {
+  run(deviceContext) {
     Tts.speak(this.what);
+  }
+}
+
+class DisplayText {
+  constructor(text, textColor, backgroundColor) {
+    this.text = text;
+    this.textColor = textColor;
+    this.backgroundColor = backgroundColor;
+  }
+
+  run(deviceContext) {
+    deviceContext.setText(this.text, this.textColor, this.backgroundColor);
   }
 }
 
 class PublicTransportVehicle {
   onAppear(current) {
-    return new Say(
-      `Podjeżdża autobus ${current.route}, kierunek ${current.direction}.`,
-    );
+    const text = `Podjeżdża autobus ${current.route}, kierunek ${current.direction}.`;
+    return [new Say(text), new DisplayText(current.route, '#000', '#0f0')];
   }
 
   onDisappear(previous) {
-    return new Say(`Autobus ${previous.route} odjechał.`);
+    const text = `Autobus ${previous.route} odjechał.`;
+    return [new Say(text), new DisplayText(text, '#000', '#0f0')];
   }
 
   onChange(previous, current) {
     if (previous.state !== current.state) {
       if (current.state === 'DOORS_OPEN') {
-        return new Say('Drzwi otwierają się.');
+        const text = 'Drzwi otwierają się.';
+        return [new Say(text), new DisplayText('[  ]', '#000', '#0f0')];
       }
       if (current.state === 'LEAVING') {
-        return new Say(`Autobus ${current.route} odjechał.`);
+        const text = `Autobus ${current.route} odjechał.`;
+        return [new Say(text), new DisplayText('-->', '#000', '#0f0')];
       }
     }
   }
@@ -52,16 +73,25 @@ class PublicTransportVehicle {
 
 class TrafficLights {
   onAppear(current) {
-    const color = current.current === 'GREEN' ? 'zielone' : 'czerwone';
-    return new Say(`Przejście dla pieszych. Światło ${color}.`);
+    this.onChange({...current, color: null}, current);
   }
 
   onDisappear(previous) {}
 
   onChange(previous, current) {
+    const color = current.color === 'GREEN' ? 'zielone' : 'czerwone';
+    const text = `Światło ${color}. Pozostało ${current.seconds} sekund.`;
+    const textColor = current.color === 'GREEN' ? '#000' : '#fff';
+    const backgroundColor = current.color === 'GREEN' ? '#00ff00' : '#ff0000';
+    const displayTextAction = new DisplayText(
+      current.seconds,
+      textColor,
+      backgroundColor,
+    );
     if (previous.color !== current.color) {
-      const color = current.color === 'GREEN' ? 'zielone' : 'czerwone';
-      return new Say(`Światło ${color}. Pozostało ${current.seconds} sekund.`);
+      return [new Say(text), displayTextAction];
+    } else {
+      return [displayTextAction];
     }
   }
 }
@@ -96,8 +126,22 @@ const App = () => {
     return device.id in devicesRef.current;
   };
 
-  const updateDeviceValue = (device, value) => {
-    devicesRef.current[device.id] = {...devicesRef.current[device.id], value};
+  const updateDeviceData = (device, value, rssi) => {
+    devicesRef.current[device.id] = {
+      ...devicesRef.current[device.id],
+      value,
+      rssi,
+    };
+    updateUI();
+  };
+
+  const updateDeviceText = (device, text, textColor, backgroundColor) => {
+    devicesRef.current[device.id] = {
+      ...devicesRef.current[device.id],
+      text,
+      textColor,
+      backgroundColor,
+    };
     updateUI();
   };
 
@@ -162,16 +206,27 @@ const App = () => {
       );
       const value = base64.decode(characteristic.value);
       console.log(`Read characteristic for ${device.id}: ${value}`);
-      updateDeviceValue(device, value);
+
+      device = await device.readRSSI();
+      console.log(`RSSI for ${device.id}: ${device.rssi}`);
+
+      updateDeviceData(device, value, device.rssi);
+
+      deviceContext = {
+        setText: (text, textColor, backgroundColor) =>
+          updateDeviceText(device, text, textColor, backgroundColor),
+      };
 
       const {type, ...params} = JSON.parse(value);
       const beacon = createBeacon(type);
-      beacon?.onAppear(params)?.run();
+      beacon?.onAppear(params)?.forEach(action => action.run(deviceContext));
 
       device.onDisconnected(() => {
         console.log(`Disconnected ${device.id}`);
         const oldParams = JSON.parse(getDeviceValue(device));
-        beacon?.onDisappear(oldParams)?.run();
+        beacon
+          ?.onDisappear(oldParams)
+          ?.forEach(action => action.run(deviceContext));
       });
 
       const subscription = characteristic.monitor(
@@ -187,17 +242,21 @@ const App = () => {
           const oldParams = JSON.parse(getDeviceValue(device));
 
           const value = base64.decode(characteristic.value);
-          updateDeviceValue(device, value);
+          device = await device.readRSSI();
+          updateDeviceData(device, value, device.rssi);
           console.log(`Updated characteristic for ${device.id}`);
 
           const newParams = JSON.parse(value);
-          beacon?.onChange(oldParams, newParams)?.run();
+          beacon
+            ?.onChange(oldParams, newParams)
+            ?.forEach(action => action.run(deviceContext));
         },
       );
       console.log(`Subscribed for ${device.id}`);
       updateDeviceSubscription(device, subscription);
     } catch (e) {
       console.log(`Error for ${device.id}, deleting`);
+      console.log(e);
       deleteDevice(device);
     }
   };
@@ -222,42 +281,60 @@ const App = () => {
     };
   }, []);
 
-  const handleSaySomething = async () => {
-    Tts.getInitStatus().then(() => {
-      // Tts.setDefaultLanguage('en-GB');
-      Tts.speak('Linia 139. Kierunek: Miasteczko Studenckie AGH');
-      Tts.speak('Drzwi otwarte. Proszę wsiadać.');
-      Tts.speak('Światło czerwone. Pozostało 25 sekund.');
-      Tts.speak('Światło zielone.');
-    });
-  };
+  const nearestDevice = devices.sort((d1, d2) => d2.rssi - d1.rssi)?.[0];
 
   return (
     <View style={styles.containerStyle}>
-      <View style={styles.beaconsContainerStyle}>
-        {devices.map(d => (
-          <TouchableOpacity key={d.device.id} onPress={() => {}}>
-            <View style={styles.beaconItemStyle}>
-              <Text>Name: {d.device.name}</Text>
-              <Text>ID: {d.device.id}</Text>
-              <Text>Characteristic: {d.value}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+      <View style={styles.nearestDeviceContainerStyle}>
+        {nearestDevice && (
+          <View
+            key={nearestDevice.device.id}
+            style={{
+              ...styles.nearestDeviceStyle,
+              backgroundColor: nearestDevice.backgroundColor,
+            }}>
+            <Text
+              style={{
+                ...styles.nearestDeviceTextStyle,
+                color: nearestDevice.textColor,
+              }}>
+              {nearestDevice.text}
+            </Text>
+          </View>
+        )}
       </View>
-      <View style={styles.buttonsContainerStyle}>
-        <Button title="Say something!" onPress={handleSaySomething} />
-      </View>
+      {/* <View style={styles.beaconsContainerStyle}>
+        <ScrollView>
+          {devices.map(d => (
+            <TouchableOpacity key={d.device.id}>
+              <View style={styles.beaconItemStyle}>
+                <Text>Name: {d.device.name}</Text>
+                <Text>ID: {d.device.id}</Text>
+                <Text>Characteristic: {d.value}</Text>
+                <Text>RSSI: {d.rssi}</Text>
+                <Text>Text: {d.text}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   containerStyle: {
+    flexDirection: 'column',
     flex: 1,
   },
+  nearestDeviceContainerStyle: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#eee',
+  },
   beaconsContainerStyle: {
-    flex: 2,
+    flex: 0.2,
     backgroundColor: '#fff',
   },
   beaconItemStyle: {
@@ -265,11 +342,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'lightgray',
   },
-  buttonsContainerStyle: {
-    flex: 1,
+  nearestDeviceStyle: {
+    width: '100%',
+    height: '100%',
+    padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#eee',
+    backgroundColor: '#ff0000',
+  },
+  nearestDeviceTextStyle: {
+    fontSize: 100,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 
