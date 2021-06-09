@@ -8,11 +8,11 @@
 
 import {
   Button,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  ScrollView,
 } from 'react-native';
 
 import {BleManager} from 'react-native-ble-plx';
@@ -48,7 +48,7 @@ class DisplayText {
 
 class PublicTransportVehicle {
   onAppear(current) {
-    const text = `Podjeżdża autobus ${current.route}, kierunek ${current.direction}.`;
+    const text = `Przyjechał autobus ${current.route}, kierunek ${current.direction}.`;
     return [new Say(text), new DisplayText(current.route, '#000', '#0f0')];
   }
 
@@ -76,7 +76,9 @@ class TrafficLights {
     this.onChange({...current, color: null}, current);
   }
 
-  onDisappear(previous) {}
+  onDisappear(previous) {
+    return [new DisplayText('', 'black', 'gray')];
+  }
 
   onChange(previous, current) {
     const color = current.color === 'GREEN' ? 'zielone' : 'czerwone';
@@ -288,7 +290,6 @@ const App = () => {
       <View style={styles.nearestDeviceContainerStyle}>
         {nearestDevice && (
           <View
-            key={nearestDevice.device.id}
             style={{
               ...styles.nearestDeviceStyle,
               backgroundColor: nearestDevice.backgroundColor,
@@ -334,7 +335,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
   },
   beaconsContainerStyle: {
-    flex: 0.2,
+    flex: 1,
     backgroundColor: '#fff',
   },
   beaconItemStyle: {
