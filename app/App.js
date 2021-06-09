@@ -49,23 +49,23 @@ class DisplayText {
 class PublicTransportVehicle {
   onAppear(current) {
     const text = `Przyjechał autobus ${current.route}, kierunek ${current.direction}.`;
-    return [new Say(text), new DisplayText(current.route, '#000', '#0f0')];
+    return [new Say(text), new DisplayText(current.route, 'black', 'cyan')];
   }
 
   onDisappear(previous) {
     const text = `Autobus ${previous.route} odjechał.`;
-    return [new Say(text), new DisplayText(text, '#000', '#0f0')];
+    return [new Say(text), new DisplayText(text, 'black', 'cyan')];
   }
 
   onChange(previous, current) {
     if (previous.state !== current.state) {
       if (current.state === 'DOORS_OPEN') {
         const text = 'Drzwi otwierają się.';
-        return [new Say(text), new DisplayText('[  ]', '#000', '#0f0')];
+        return [new Say(text), new DisplayText('[  ]', 'black', 'cyan')];
       }
       if (current.state === 'LEAVING') {
         const text = `Autobus ${current.route} odjechał.`;
-        return [new Say(text), new DisplayText('-->', '#000', '#0f0')];
+        return [new Say(text), new DisplayText('-->', 'black', 'cyan')];
       }
     }
   }
@@ -73,7 +73,7 @@ class PublicTransportVehicle {
 
 class TrafficLights {
   onAppear(current) {
-    this.onChange({...current, color: null}, current);
+    return this.onChange({...current, color: null}, current);
   }
 
   onDisappear(previous) {
@@ -83,8 +83,8 @@ class TrafficLights {
   onChange(previous, current) {
     const color = current.color === 'GREEN' ? 'zielone' : 'czerwone';
     const text = `Światło ${color}. Pozostało ${current.seconds} sekund.`;
-    const textColor = current.color === 'GREEN' ? '#000' : '#fff';
-    const backgroundColor = current.color === 'GREEN' ? '#00ff00' : '#ff0000';
+    const textColor = current.color === 'GREEN' ? 'black' : 'white';
+    const backgroundColor = current.color === 'GREEN' ? 'lime' : 'red';
     const displayTextAction = new DisplayText(
       current.seconds,
       textColor,
@@ -104,6 +104,8 @@ function createBeacon(type) {
       return new PublicTransportVehicle();
     case 'TRAFFIC_LIGHTS':
       return new TrafficLights();
+    default:
+      console.log(`Unknown beacon type ${type}`);
   }
 }
 
@@ -221,7 +223,7 @@ const App = () => {
 
       const {type, ...params} = JSON.parse(value);
       const beacon = createBeacon(type);
-      beacon?.onAppear(params)?.forEach(action => action.run(deviceContext));
+      beacon?.onAppear(params).forEach(action => action.run(deviceContext));
 
       device.onDisconnected(() => {
         console.log(`Disconnected ${device.id}`);
@@ -336,7 +338,7 @@ const styles = StyleSheet.create({
   },
   beaconsContainerStyle: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
   },
   beaconItemStyle: {
     padding: 16,
@@ -349,7 +351,7 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ff0000',
+    backgroundColor: 'gray',
   },
   nearestDeviceTextStyle: {
     fontSize: 100,
