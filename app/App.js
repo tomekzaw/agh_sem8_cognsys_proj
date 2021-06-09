@@ -223,7 +223,7 @@ const App = () => {
 
       const {type, ...params} = JSON.parse(value);
       const beacon = createBeacon(type);
-      beacon?.onAppear(params).forEach(action => action.run(deviceContext));
+      beacon?.onAppear(params)?.forEach(action => action.run(deviceContext));
 
       device.onDisconnected(() => {
         console.log(`Disconnected ${device.id}`);
